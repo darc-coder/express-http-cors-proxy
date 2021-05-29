@@ -1,6 +1,7 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     app = express();
+const fetch = require('node-fetch');
 const fs = require('fs');
 
 var myLimit = typeof (process.argv[2]) != 'undefined' ? process.argv[2] : '400kb';
