@@ -1,4 +1,3 @@
-const { runURI } = require("./temp");
 var express = require('express'),
     bodyParser = require('body-parser'),
     app = express();
@@ -46,3 +45,26 @@ app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), function () {
     console.log('Proxy server listening on port ' + app.get('port'));
 });
+
+function runURI(uri) {
+    fetch(uri)
+        .then(function (response) {
+            switch (response.status) {
+                // status "OK"
+                case 200:
+                    return response.text();
+                // status "Not Found"
+                case 404:
+                    throw response;
+            }
+        })
+        .then(function (template) {
+            fs.unlinkSync("newfile.txt");
+            fs.writeFileSync("newfile.txt", template);
+            console.log("done");
+        })
+        .catch(function (response) {
+            // "Not Found"
+            console.log(response);
+        });
+}
