@@ -1,0 +1,24 @@
+{
+  "name": "vrapp",
+  "version": "1.0.0",
+  "description": "VR Gaming Registration App",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "VR",
+    "App",
+    "VR",
+    "Registration"
+  ],
+  "author": "Nitin",
+  "license": "ISC",
+  "dependencies": {
+    "dom-parser": "^0.1.6",
+    "express": "^4.17.1",
+    "jsdom": "^16.6.0",
+    "pug": "^3.0.2",
+    "request": "^2.88.2"
+  }
+}
