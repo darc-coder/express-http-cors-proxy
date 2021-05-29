@@ -6,9 +6,13 @@ const fs = require('fs');
 
 var myLimit = typeof (process.argv[2]) != 'undefined' ? process.argv[2] : '400kb';
 console.log('Using limit: ', myLimit);
+console.log(runURI);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
+app.get("/",(req, res) =>{
+    res.send("Base running");
+})
 app.get("/active", (req, res) => {
     res.send("Site Active");
 })
