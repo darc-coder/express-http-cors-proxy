@@ -4,6 +4,8 @@ var express = require('express'),
 const fetch = require('node-fetch');
 const fs = require('fs');
 
+let finaloutput = "";
+
 var myLimit = typeof (process.argv[2]) != 'undefined' ? process.argv[2] : '400kb';
 console.log('Using limit: ', myLimit);
 console.log(runURI);
@@ -37,7 +39,7 @@ app.all('*', function (req, res, next) {
 
         runURI(targetURL)
         let output = fs.readFileSync("newfile.txt")
-        res.send(output).set('Accept', 'text/html');
+        res.send(finaloutput).set('Accept', 'text/html');
     }
 });
 
@@ -62,6 +64,7 @@ function runURI(uri) {
         .then(function (template) {
             fs.unlinkSync("newfile.txt");
             fs.writeFileSync("newfile.txt", template);
+            finaloutput = template;
             console.log("done");
         })
         .catch(function (response) {
