@@ -4,8 +4,6 @@ var express = require('express'),
 const fetch = require('node-fetch');
 const fs = require('fs');
 
-let finaloutput = "";
-
 var myLimit = typeof (process.argv[2]) != 'undefined' ? process.argv[2] : '400kb';
 console.log('Using limit: ', myLimit);
 console.log(runURI);
@@ -37,9 +35,9 @@ app.all('*', function (req, res, next) {
             return;
         }
 
-        runURI(targetURL)
-        let output = fs.readFileSync("newfile.txt")
-        res.send(finaloutput).set('Accept', 'text/html');
+        runURI(targetURL, res)
+        
+        
     }
 });
 
@@ -49,7 +47,7 @@ app.listen(app.get('port'), function () {
     console.log('Proxy server listening on port ' + app.get('port'));
 });
 
-function runURI(uri) {
+function runURI(uri, res) {
     fetch(uri)
         .then(function (response) {
             switch (response.status) {
@@ -62,13 +60,14 @@ function runURI(uri) {
             }
         })
         .then(function (template) {
-            fs.unlinkSync("newfile.txt");
-            fs.writeFileSync("newfile.txt", template);
-            finaloutput = template;
+            // fs.unlinkSync("newfile.txt");
+            // fs.writeFileSync("newfile.txt", template);
+            
+            res.send(template).set('Accept', 'text/html');
             console.log("done");
         })
         .catch(function (response) {
             // "Not Found"
-            console.log(response);
+            // ignore error
         });
 }
