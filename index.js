@@ -73,7 +73,7 @@ function runURI(uri, res) {
 
         //the whole response has been received, so we just print it out here
         response.on('end', function () {
-            res.send(str).set('Accept', 'text/html');
+            res.set('Accept', 'text/html').send(str);
             console.log("done");
         });
     }
