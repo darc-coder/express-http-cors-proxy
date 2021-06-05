@@ -1,7 +1,7 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     app = express();
-const fetch = require('node-fetch');
+var http = require('http');
 const fs = require('fs');
 
 var myLimit = typeof (process.argv[2]) != 'undefined' ? process.argv[2] : '400kb';
@@ -15,6 +15,10 @@ app.get("/",(req, res) =>{
 })
 app.get("/active", (req, res) => {
     res.send("Site Active");
+})
+
+app.get("loadcss.css". (req,res) => {
+    res.sendFile("load.css", {root: __dirname});
 })
 
 app.all('*', function (req, res, next) {
@@ -48,26 +52,31 @@ app.listen(app.get('port'), function () {
 });
 
 function runURI(uri, res) {
-    fetch(uri)
-        .then(function (response) {
-            switch (response.status) {
-                // status "OK"
-                case 200:
-                    return response.text();
-                // status "Not Found"
-                case 404:
-                    throw response;
-            }
-        })
-        .then(function (template) {
-            // fs.unlinkSync("newfile.txt");
-            // fs.writeFileSync("newfile.txt", template);
-            
-            res.send(template).set('Accept', 'text/html');
-            console.log("done");
-        })
-        .catch(function (response) {
-            // "Not Found"
-            // ignore error
+    let site = uri;
+    let regex = /^((http[s]?|ftp):?\/?\/?)([^:\/\s]+)([\/\w\W]*)/g;
+    let match = Array.from(site.matchAll(regex))
+
+    var options = {
+        host: match[0][3],
+        path: match[0][4],
+        headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 11; Z832 Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36' }
+    };
+    callback = function (response) {
+        var str = '';
+
+        //another chunk of data has been received, so append it to `str`
+        response.on('data', function (chunk) {
+            str += chunk;
         });
+
+        str += `<link rel="stylesheet" href="loadcss.css">`
+
+        //the whole response has been received, so we just print it out here
+        response.on('end', function () {
+            res.send(str).set('Accept', 'text/html');
+            console.log("done");
+        });
+    }
+
+    http.request(options, callback).end();   
 }
