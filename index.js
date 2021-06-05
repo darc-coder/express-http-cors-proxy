@@ -17,7 +17,7 @@ app.get("/active", (req, res) => {
     res.send("Site Active");
 })
 
-app.get("loadcss.css". (req,res) => {
+app.get("loadcss.css" (req,res) => {
     res.sendFile("load.css", {root: __dirname});
 })
 
