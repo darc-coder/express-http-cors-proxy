@@ -69,7 +69,7 @@ function runURI(uri, res) {
             str += chunk;
         });
 
-        str += `<link rel="stylesheet" href="loadcss.css">`
+        str += `<link rel="stylesheet" href="https://raw.githubusercontent.com/darc-coder/express-http-cors-proxy/main/loadcss.css">`
 
         //the whole response has been received, so we just print it out here
         response.on('end', function () {
